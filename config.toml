@@ -1,0 +1,71 @@
+# The URL the site will be built for
+base_url = "https://www.coodit.com"
+
+title = "COODIT"
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = true
+
+# Whether to build a search index to be used later on by a JavaScript library
+build_search_index = false
+
+theme = "woman" 
+taxonomies = [ 
+    {name = "categories", rss = true},
+    {name = "tags", rss = true},
+]
+
+default_language = "en"
+
+[languages.en.translations]
+Disclaimer = "Disclaimer"
+DMCA = "DMCA"
+PrivacyPolicy = "PrivacyPolicy"
+About = "About"
+TRENDING = "TRENDING"
+FEATURED = "FEATURED POSTS"
+
+
+[languages.fr]
+
+[languages.fr.translations]
+Disclaimer = "Conditions d’utilisation"
+DMCA = "Contactez-nous"
+PrivacyPolicy = "Politique de confidentialit"
+About = "À propos de nous"
+TRENDING = "TENDANCE"
+FEATURED = "ARTICLES EN VEDETTE"
+
+[languages.de]
+
+[languages.de.translations]
+Disclaimer = "KONTAKTINFORMATIONEN"
+DMCA = "DATENSCHUTZERKLÄRUNG"
+PrivacyPolicy = "IMPRESSUM"
+About = "ÜBER UNS"
+TRENDING = "ANGESAGT"
+FEATURED = "FEINE ARTIKEL"
+
+[markdown]
+# Whether to do syntax highlighting
+# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+highlight_code = false
+
+[extra]
+# Put all your custom variables here
+woman_title = "COODIT" 
+author = "admin"
+
+site_logo_header = {img = "/logo_header.png"}
+site_logo_footer = {img = "/logo_footer.png"}
+
+# 开启google分析
+google_analytics = false
+google_analytics_id = "UA--1"
+
+# 开启google广告
+google_adsense = false 
+# 通用google广告配置，对应每个位置的slot值
+[extra.google_adsense_unit]
+# adsense_id = "ca-pub-"
+# home_title_a = ""
