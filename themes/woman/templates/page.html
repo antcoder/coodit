@@ -1,0 +1,140 @@
+{% extends "index.html" %}
+
+{% block title %}{{page.title}}{% endblock title %}
+{% block description %}{{page.title}}{% endblock description %}
+
+{% block keywords %}
+{% if page.extra and page.extra.keywords %}
+{{page.extra.keywords}}
+{% endif %}
+{% endblock keywords %}
+
+
+{% block content %}
+{% set path_arr = page.relative_path | split(pat="/") %}
+{% set ads_unit_name = path_arr | nth(n = path_arr | length - 2 )%}
+{% set ads_unit_config = config.extra.google_adsense_page_unit[ads_unit_name] | default(value = config.extra.google_adsense_unit) %}
+
+{% if page.lang == "en" %}
+{% set lang_key = "" %}
+{% else %}
+{% set lang_key = "."~page.lang %}
+{% endif %}
+{% set root_section_path = "_index"~lang_key~".md" %}
+{% set root_section = get_section(path = root_section_path) -%}
+
+<div class="mainbox mainbox-list cl">
+    <div class="left article-content">
+        <article class="post slide-box">
+            <h1>
+            {{ page.title }}
+            </h1>
+            {{ macros::ads(ads_id = "post_a", ads_unit_config = ads_unit_config) }}
+            <div class="article essay">
+                {{ page.content | safe }}
+            </div>
+
+            {% block page_before_footer %}
+            {% endblock page_before_footer %}
+
+            <div class="post-footer">
+                {% block page_footer %}
+                {% if page.taxonomies.tags %}
+                <div class="post-tags">
+                    {% for tag in page.taxonomies.tags %}
+                    <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}">#{{ tag }}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {{ macros::ads(ads_id = "post_c_1",ads_unit_config = ads_unit_config) }}
+                {% if page.extra.next %}
+                {% if page.lang == "en" %}
+                {% set section = get_section(path = page.relative_path | replace(from="index.md",to="/_index.md")) -%}
+                {% else %}
+                {% set section = get_section(path = page.relative_path | replace(from="index"~"."~page.lang~".md",to="/_index"~"."~page.lang~".md")) -%}
+                {% endif %}
+                {% if section and section.pages %}
+                {% set first_page = section.pages | last %}
+                
+                <div class="page-box">
+                    <a href="{{ first_page.permalink }}"><span class="next_p">Next Page <i>&gt;</i></span></a>
+                </div>
+                {% endif %}
+
+                {% else %}
+
+
+                {% if page.later and page.later.relative_path | replace(from=page.later.slug~lang_key~".md",to="") == page.relative_path | replace(from=page.slug~lang_key~".md",to="") %}
+                <div class="page-box">
+                    <a href="{{ page.later.permalink }}"><span class="next_p">Next Page<i>&gt;</i></span></a>
+                </div>
+                
+                {% endif %}
+
+                {% endif %}
+
+                {% endblock page_footer %}
+            </div>
+
+            <div class="tmp-list">
+                {{ macros::ads(ads_id = "post_c_3",ads_unit_config = ads_unit_config) }}
+                <h2>{{trans(key="TRENDING",lang=page.lang)}}</h2>
+                <ul>
+
+                    {% set_global post_i = 0 %}
+                    {% for item in root_section.pages | filter(attribute="extra.next") | sort(attribute="date") | reverse %}
+                    {% if post_i > 2 %}{% break %}{% endif %}
+                    {% if item.components.0 != page.components.0 and item.title != page.title %}
+                    <li>
+                        <a href="{{item.permalink}}" class="tmp-img">
+                            {% set image = resize_image(path=item.extra.img, width=335, op="fit_width",format="jpg") %}
+                            <img loading="lazy" src="{{image.url}}" alt="">
+                        </a>
+                        <div class="tmp-txt">
+                            <p><a href="{{item.permalink}}">{{item.title}}</a></p>
+                        </div>
+                    </li>
+                    {% set_global post_i = post_i + 1 %}
+                    {% endif %}
+                    {% endfor %}
+
+                </ul>
+            </div>
+
+            {% block page_after_footer %}
+            {% endblock page_after_footer %}
+        </article>
+
+
+    </div>
+    <aside class="right tmp-list">
+        <h2>
+            {{trans(key="FEATURED",lang=page.lang)}}
+        </h2>
+        {{ macros::ads(ads_id = "post_b_1",ads_unit_config = ads_unit_config) }}
+        <ul class="featured-list">
+            {% set_global post_i = 0 %}
+            {% for item in root_section.pages | sort(attribute="date") | reverse %}
+            {% if post_i > 2 %}{% break %}{% endif %}
+            {% if item.components.0 == page.components.0 and item.title != page.title %}
+            <li>
+                <a href="{{item.permalink}}" class="tmp-img">
+                    {% set image = resize_image(path=item.extra.img, width=335, op="fit_width",format="jpg") %}
+                    <img loading="lazy" src="{{image.url}}" alt="">
+                </a>
+                <div class="tmp-txt">
+                    <p><a href="{{item.permalink}}">{{item.title}}</a></p>
+                </div>
+            </li>
+            {% set_global post_i = post_i + 1 %}
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {{ macros::ads(ads_id = "post_b_2",ads_unit_config = config.extra.google_adsense_unit) }}
+    </aside>
+    {{ macros::ads(ads_id = "post_c_2",ads_unit_config = ads_unit_config) }}
+</div>
+
+{% endblock content %}
+

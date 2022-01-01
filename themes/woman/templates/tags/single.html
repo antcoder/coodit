@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="mainbox mainbox-div">
+    <div class="section">
+        {{ macros::ads(ads_id = "category_a",ads_client_id = config.extra.google_adsense_id,ads_unit_config = config.extra.google_adsense_unit) }}
+        <h2 class="content-h2 tmp-h2"><span>Tag: {{term.name}}</span></h2>
+        <p class="tmp-post"></p>
+        <ul class="article-box">
+            {% for page in term.pages %}
+            <li>
+                <div class="article-box-img">
+                    <a href="{{page.permalink}}">
+                        {% if page.extra.img %}
+                        {% set image = resize_image(path=page.extra.img, width=335, op="fit_width",format="jpg") %}
+                        <img src="{{image.url}}" width="100%" height="100%" alt="{{page.title}}">
+                        {% endif %}
+                    </a>
+                </div>
+                <span><a href="{{page.permalink}}">{{page.title}}</a></span>
+            </li>
+            {% endfor %}
+        </ul>
+        {{ macros::ads(ads_id = "category_b",ads_client_id = config.extra.google_adsense_id,ads_unit_config = config.extra.google_adsense_unit) }}
+    </div>
+</div>
+{% endblock content %}

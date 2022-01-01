@@ -1,0 +1,226 @@
+{% import "macros.html" as macros %}
+
+<!DOCTYPE html>
+<html lang="{{lang}}">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+      <meta name="description" content="{% block description %}{{config.extra.description}}{% endblock description %}">
+      <meta name = "keywords" content = "{% block keywords %}{% endblock keywords %}" />
+
+      {% if config.extra.google_analytics and config.extra.google_analytics_id %}
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.extra.google_analytics_id }}"></script>
+      <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '{{ config.extra.google_analytics_id }}');
+      </script>
+      {% endif %}
+
+      {% if config.extra.google_adsense and config.extra.google_adsense_unit and config.extra.google_adsense_unit.adsense_id %}
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      {% endif %}
+
+      <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+
+      {% if config.generate_feed %}
+        <link rel="alternate" type={% if config.feed_filename == "atom.xml" %}"application/atom+xml"{% else %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
+      {% endif %}
+
+      {% block js %}
+      {% endblock js %}
+
+      {% block css %}
+          <link rel="stylesheet" href="{{ get_url(path="site.css", trailing_slash=false) }}">
+      {% endblock css %}
+
+      <link rel="preconnect" href="//pagead2.googlesyndication.com">
+      <link rel="preconnect" href="//googleads.g.doubleclick.net">
+      <link rel="preconnect" href="//www.googletagmanager.com">
+
+      {% block extra_head %}
+      {% endblock extra_head %}
+    </head>
+
+    <body>
+        <header>
+            <div class=" header  header-div">
+                <div class="logo">
+                    {% if config.extra.site_logo_header %}
+                    {% if lang == "en" %}
+                    <a href="/">
+                    {% else %}
+                    <a href="/{{lang}}">
+                    {% endif %}
+                    {% if config.extra.site_logo_header.img %}
+                    {% set image = resize_image(path=config.extra.site_logo_header.img, width=200, op="fit_width") %}
+                    <img src="{{image.url}}" alt="{{ config.extra.woman_title }}">
+                    {% else %}
+                    <h3>{{config.title}}</h3>
+                    {% endif %}
+                        
+                    </a>
+                    {% endif %}
+                </div>
+                <input type="checkbox">
+                <div>
+                    <i class="nav-icon" id="nav-icon"></i>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-ul">
+                        {% if lang=="en" %}
+                        {% set categories = get_taxonomy(kind="categories") %}
+                        {% for item in categories.items %}
+                        {% if item.name | length > 1 %}
+                        <li>
+                            <a class="lia" href="{{ item.permalink }}">
+                                {{ item.name }}
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </ul>
+                    {{ macros::ads(ads_id = "home_title_a",ads_unit_config = config.extra.google_adsense_unit) }}
+                </nav>
+            </div>
+        </header>
+        <main class="main">
+            {% block content %}
+            {% set banner_key = lang~"_banner" %}
+            {% if config.extra[banner_key] %}
+            {% set banner_config = config.extra[banner_key] %}
+            <div>
+                <a href="{{banner_config.url}}">
+                    {% set image = resize_image(path=banner_config.img, width=1519, op="fit_width") %}
+                    <img class="banner" alt="" width="100%" height="100%" src="{{image.url}}">
+                </a>
+                <div class="banner-title">
+                    <h1><a href="{{banner_config.url}}">{{banner_config.title}}</a></h1>
+                </div>
+            </div>
+            {% endif %}
+            <div class="mainbox mainbox-div ">
+                <div class="mainbox-index">
+                    <ul class="mainbox-index-list">
+                        {% for page in paginator.pages %}
+                        <li>
+                            <a href="{{ page.permalink }}">
+                                {% set image = resize_image(path=page.extra.img, width=459, op="fit_width",format="jpg") %}
+                                <img loading="lazy" width="100%" height="100%" src="{{image.url}}" alt="{{page.title}}">
+                            </a>
+                            <div class="category-item">
+                                {% if page.taxonomies.categories %}
+                                    {% for category in page.taxonomies.categories %}
+                                    <a class="category" href="{{ get_taxonomy_url(kind="categories", name = category) }}">{{ category }}</a>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <div>
+                                    <a href="{{ page.permalink }}">
+                                        <h3>{{ page.title }}</h3>
+                                    </a>
+                                    <div class="mainbox-content">
+                                    {{ page.summary | safe }}
+                                    </div>
+                                </div>
+                            </div>
+                            {{ macros::ads(ads_id = "home_b_number" | replace(from="number",to=loop.index | as_str ),ads_unit_config = config.extra.google_adsense_unit) }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                   
+                    {{ macros::ads(ads_id = "home_c_1",ads_unit_config = config.extra.google_adsense_unit) }}
+                </div>
+                <div class="mainbox-index">
+                    <h2 class="content-h2">
+                        {{trans(key="TRENDING",lang=lang)}}                    
+                    </h2>
+                    <ul class="article-box">
+                        {% set trend_key = lang~"_trend" %}
+                        {% if config.extra[trend_key] %}
+                        {% for item in config.extra[trend_key] %}
+                        <li>
+                            <div class="article-box-img">
+                                <a href="{{item.url}}">
+                                    {% set image = resize_image(path=item.img, width=335, op="fit_width",format="jpg") %}
+                                    <img loading="lazy" src="{{image.url}}" width="100%" height="100%" alt="{{item.title}}">
+                                </a>
+                            </div>
+                            <span>
+                                <a href="{{item.url}}">{{item.title}}</a>
+                            </span>
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+                    </ul>
+                    {{ macros::ads(ads_id = "home_c_2",ads_unit_config = config.extra.google_adsense_unit) }}
+                </div>
+            </div>
+            {% endblock content %}
+        </main>
+
+        {% block footer %}
+        <footer class="footer">
+            <div>
+                <div class="container mainbox-div mainbox">
+                    <ul class="footer-bar">
+                        <li class="footer-logo-div">
+                            <div class="footer-logo">
+                                {% if config.extra.site_logo_footer %}
+                                {% if lang == "en" %}
+                                <a href="/">
+                                {% else %}
+                                <a href="/{{lang}}">
+                                {% endif %}
+                                    {% if config.extra.site_logo_footer.img %}
+                                        <img src="{{config.extra.site_logo_footer.img}}" alt="{{ config.extra.woman_title }}">
+                                    {% else %}
+                                        <h3>{{config.title}}</h3>
+                                    {% endif %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <p class="copyright">©{{config.extra.woman_title}} 2021</p>
+                        </li>
+                        <li class="menus">
+                            {% if lang == "en" %}
+                            <ul>
+                                {% set categories = get_taxonomy(kind="categories") %}
+                                {% for item in categories.items %}
+                                <li>
+                                    <a href="{{ item.permalink }}">
+                                        {{ item.name }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% set page_lang = "/"~lang %}
+                            {% if lang == "en" %}
+                            {% set page_lang = "" %}
+                            {% endif %}
+                            <ul>
+                                <li><a href="{{page_lang}}/pages/disclaimer">{{trans(key="Disclaimer",lang=lang)}}</a></li>
+                                <li><a href="{{page_lang}}/pages/dmca">{{trans(key="DMCA",lang=lang)}}</a></li>
+                                <li><a href="{{page_lang}}/pages/privacy-policy">{{trans(key="PrivacyPolicy",lang=lang)}}</a></li>
+                                <li><a href="{{page_lang}}/pages/about">{{trans(key="About",lang=lang)}}</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+        {% endblock footer %}
+
+        {% block js_body %}
+        <script type="text/javascript" src="{{ get_url(path="woman.js", trailing_slash=false) }}" ></script>
+        {% endblock js_body %}
+    </body>
+
+</html>

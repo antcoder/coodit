@@ -1,0 +1,41 @@
+{% macro ads(ads_id,ads_unit_config) %}
+    {% if config.extra.google_adsense and ads_unit_config[ads_id] %}
+    <div class="ads" id="{{ads_id}}">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="{{ads_unit_config.adsense_id}}"
+             data-ad-slot="{{ads_unit_config[ads_id]}}"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+            if (document.readyState === "complete" ||
+                (document.readyState !== "loading" && !document.documentElement.doScroll)
+            ) {
+            } else {
+                document.addEventListener('DOMContentLoaded',function(){
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                });
+            }
+           */
+        </script>
+    </div>
+    {% endif %}
+{% endmacro ads %}
+
+{% macro title(page) %}
+    <div class="post__header slideshow">
+        <h1 class="post__title">
+            <a href="{{ page.permalink }}">{{ page.title }}</a>
+        </h1>
+        <div class="post__meta">
+            <span class="post__time">{{ page.date | date(format="%F") }}</span>
+            {% if page.category %}
+                <div class="post__category">
+                    <a href="{{ get_taxonomy_url(kind="category", name=page.category) }}">{{ page.category }}</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro title %}

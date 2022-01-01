@@ -1,0 +1,22 @@
+name = "woman"
+description = "A theme for woman"
+license = "MIT"
+homepage = "https://github.com/antcoder"
+min_version = "0.11.0"
+
+[extra]
+description = "..."
+woman_title = "woman"
+woman_trend = [
+    {url = "$BASE_URL/first-post", title = "first post", img=""},
+    {url = "$BASE_URL/second-post", title = "second post", img=""},
+]
+
+google_analytics = false
+# google_analytics_id = "UA-XXXXXX-X"
+
+google_adsense = false
+# google_adsense_id = "ca-pub-XXXXXXXXXXXXXXXX"
+
+[author]
+name = "..."
