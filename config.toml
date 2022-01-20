@@ -56,6 +56,8 @@ highlight_code = false
 woman_title = "COODIT" 
 author = "admin"
 
+en_banner = {url = "/health/1-first-post/", title = "1 first post", img="/banner.jpg", category = "Health"}
+
 site_logo_header = {img = "/logo_header.png"}
 site_logo_footer = {img = "/logo_footer.png"}
 
