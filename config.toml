@@ -62,8 +62,8 @@ site_logo_header = {img = "/logo_header.png"}
 site_logo_footer = {img = "/logo_footer.png"}
 
 # 开启google分析
-google_analytics = false
-google_analytics_id = "UA--1"
+google_analytics = true 
+google_analytics_id = "UA-27932381-1"
 
 # 开启google广告
 google_adsense = false 
