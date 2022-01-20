@@ -66,8 +66,8 @@ google_analytics = true
 google_analytics_id = "UA-27932381-1"
 
 # 开启google广告
-google_adsense = false 
+google_adsense = true 
 # 通用google广告配置，对应每个位置的slot值
 [extra.google_adsense_unit]
-# adsense_id = "ca-pub-"
+adsense_id = "ca-pub-4374321092406209"
 # home_title_a = ""
