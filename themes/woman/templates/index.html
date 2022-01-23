@@ -23,7 +23,7 @@
       {% endif %}
 
       {% if config.extra.google_adsense and config.extra.google_adsense_unit and config.extra.google_adsense_unit.adsense_id %}
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <script data-ad-client="{{config.extra.google_adsense_unit.adsense_id}}" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
       {% endif %}
 
       <title>{% block title %}{{ config.title }}{% endblock title %}</title>
